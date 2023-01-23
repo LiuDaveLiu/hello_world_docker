@@ -1,0 +1,145 @@
+{
+  "name": "hello-world",
+  "description": "test",
+  "version": "latest",
+  "schema-version": "1.0",
+  "type": "docker",
+  "command-line": "./entrypoint.py #PROJECT# #SESSION# #COMPRESS# #BIDS# #OVERWRITE# #OTHER#",
+  "mounts": [
+    {
+      "name": "in",
+      "writable": false,
+      "path": "/input"
+    },
+    {
+      "name": "out",
+      "writable": true,
+      "path": "/output"
+    }
+  ],
+  "environment-variables": {},
+  "ports": {},
+  "inputs": [
+    {
+      "name": "PROJECT",
+      "label": "Project ID",
+      "description": "Id of the XNAT project",
+      "type": "string",
+      "required": true,
+      "replacement-key": "#PROJECT#",
+      "command-line-flag": "--project",
+      "select-values": []
+    },
+    {
+      "name": "SESSION",
+      "label": "Session ID",
+      "description": "Id of the XNAT session",
+      "type": "string",
+      "required": true,
+      "replacement-key": "#SESSION#",
+      "command-line-flag": "--session",
+      "select-values": []
+    },
+    {
+      "name": "OVERWRITE",
+      "label": "Overwrite existing?",
+      "type": "boolean",
+      "default-value": false,
+      "required": false,
+      "replacement-key": "#OVERWRITE#",
+      "true-value": "--overwrite",
+      "false-value": ""
+    },
+    {
+      "name": "BIDS",
+      "label": "Add/use BIDS?",
+      "type": "boolean",
+      "default-value": false,
+      "required": false,
+      "replacement-key": "#BIDS#",
+      "true-value": "--use-bids",
+      "false-value": ""
+    },
+    {
+      "name": "COMPRESS",
+      "label": "Output compressed files?",
+      "type": "boolean",
+      "default-value": false,
+      "required": false,
+      "replacement-key": "#COMPRESS#",
+      "true-value": "--compress",
+      "false-value": ""
+    },
+    {
+      "name": "OTHER",
+      "description": "Other command-line flags to pass to dcm2niix",
+      "type": "string",
+      "required": false,
+      "replacement-key": "#OTHER#",
+      "select-values": []
+    }
+  ],
+  "outputs": [
+    {
+      "name": "output",
+      "description": "Output files",
+      "required": true,
+      "mount": "out"
+    }
+  ],
+  "xnat": [
+    {
+      "name": "hello-world",
+      "label": "hello-world",
+      "description": "test",
+      "contexts": [
+        "xnat:imageSessionData"
+      ],
+      "external-inputs": [
+        {
+          "name": "session",
+          "description": "Input session with scans containing DICOM file(s).",
+          "type": "Session",
+          "required": true,
+          "load-children": true,
+          "provides-files-for-command-mount": "in"
+        }
+      ],
+      "derived-inputs": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "required": true,
+          "provides-value-for-command-input": "PROJECT",
+          "load-children": true,
+          "derived-from-wrapper-input": "session",
+          "derived-from-xnat-object-property": "project-id",
+          "multiple": false
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "required": true,
+          "provides-value-for-command-input": "SESSION",
+          "load-children": true,
+          "derived-from-wrapper-input": "session",
+          "derived-from-xnat-object-property": "id",
+          "multiple": false
+        }
+      ],
+      "output-handlers": [
+        {
+          "name": "output-resource",
+          "accepts-command-output": "output",
+          "as-a-child-of": "session",
+          "type": "Resource",
+          "label": "DCM2NII_SESSION"
+        }
+      ]
+    }
+  ],
+  "container-labels": {},
+  "generic-resources": {
+    "cpu": "2"
+  }
+}
