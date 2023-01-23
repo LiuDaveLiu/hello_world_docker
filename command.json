@@ -4,7 +4,7 @@
   "version": "latest",
   "schema-version": "1.0",
   "type": "docker",
-  "command-line": "./entrypoint.py #PROJECT# #SESSION# #COMPRESS# #BIDS# #OVERWRITE# #OTHER#",
+  "command-line": "./main.py",
   "mounts": [
     {
       "name": "in",
