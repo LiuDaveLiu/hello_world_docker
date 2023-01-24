@@ -2,8 +2,6 @@ version: "3.7"
 services:
   hello-world:
     container_name: hello-world
-    # image: 1mcrprdxnatreg.mdanderson.org/xnatresearch/jwwood/dcm2nifti-session:1.0
-    # image: 1mcrtstxnatharb.mdanderson.edu/lliu10/hello-world:1.0
     image: hpcharbor.mdanderson.edu/lliu10/hello-world:1.0
     build:
       network: host
