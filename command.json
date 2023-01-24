@@ -5,6 +5,7 @@
   "schema-version": "1.0",
   "type": "docker",
   "command-line": "./main.py",
+  "override-entrypoint": true,
   "mounts": [
     {
       "name": "in",

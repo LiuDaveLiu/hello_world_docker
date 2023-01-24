@@ -22,6 +22,8 @@ RUN pip3 install -r requirements.txt
 CMD python main.py
 
 COPY src/*.* .
+
+RUN chmod +x main.py
 # In order to launch our python code, we must import it into our image.
 # We use the keyword 'COPY' to do that.
 # The first parameter 'main.py' is the name of the file on the host.
